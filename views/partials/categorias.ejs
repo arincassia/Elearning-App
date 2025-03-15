@@ -1,0 +1,30 @@
+<div class="container-xxl py-5 category">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h6 class="section-title bg-white text-center text-primary px-3">Categorías</h6>
+            <h1 class="mb-5">Categorías de Cursos</h1>
+        </div>
+
+        <% if (categorias.length > 0) { %>
+            <div class="row g-3">
+                <% categorias.forEach((categoria, index) => { %>
+                    <div class="col-lg-6 col-md-5 wow zoomIn" data-wow-delay="0.<%= (index + 1) * 2 %>s">
+                        <a class="position-relative d-block overflow-hidden" href="">
+                            <img class="img-fluid" src="img/cat-<%= (index % 4) + 1 %>.jpg" alt="" 
+                            style="height: 280px; width:700px">
+                            <div class="bg-white text-center position-absolute bottom-0 end-0" style="margin: 1px;">
+                                <h5 class="m-0"><%= categoria.nombre %></h5>
+                                <small class="text-primary"><%= categoria.cursos %> cursos</small>
+                            </div>
+                        </a>
+                    </div>
+                <% }); %>
+            </div>
+        <% } else { %>
+            <div class="text-center">
+                <p class="text-muted">No hay categorías disponibles en este momento.</p>
+            </div>
+        <% } %>
+
+    </div>
+</div>
