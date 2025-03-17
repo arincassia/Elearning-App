@@ -432,3 +432,50 @@
     padding-right: 0;
     border-right: none;
 }
+
+.course-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.course-content {
+    width: 60%;
+}
+
+.course-image {
+    width: 100%;
+    height: auto;
+    margin-bottom: 15px;
+}
+
+.course-details {
+    width: 35%;
+}
+
+.course-box {
+    background-color: #06BBCC;
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.course-box p {
+    margin: 8px 0;
+}
+
+
+.categories-course-box {
+    background-color: white;
+    color: black;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+
+
+
+.price {
+    font-size: 1.2em;
+    font-weight: bold;
+}

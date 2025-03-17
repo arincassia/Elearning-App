@@ -29,13 +29,13 @@ const categorias = [
 ];
 
 const cursos = [
-    { id: 1, nombre: "Web Design & Development Course for Beginners", precio: 10000, estrellas: 5 },
-    { id: 2, nombre: "Ingeniería de Software 3", precio: 10000, estrellas: 4 },
-    { id: 3, nombre: "Ingeniería de Software 4", precio: 20000, estrellas: 4.5 },
-    { id: 4, nombre: "Ingeniería de Software 1", precio: 30000, estrellas: 4.3 },
-    { id: 5, nombre: "Programación 1", precio: 10000, estrellas: 4.8 },
-    { id: 6, nombre: "Informática 1", precio: 40000, estrellas: 5 },
-    { id: 7, nombre: "Base de Datos 1", precio: 10000, estrellas: 4.2 },
+    { id: 1, nombre: "Web Design & Development Course for Beginners", precio: 10000, estrellas: 5, clases:15, idioma:"English", nivel:"Beginner", categoria: 1 },
+    { id: 2, nombre: "Ingeniería de Software 3", precio: 10000, estrellas: 4, clases:20, idioma:"Spanish", nivel:"Intermediate" },
+    { id: 3, nombre: "Ingeniería de Software 4", precio: 20000, estrellas: 4.5, clases:30, idioma:"English", nivel:"Advanced" },
+    { id: 4, nombre: "Ingeniería de Software 1", precio: 30000, estrellas: 4.3, clases:12, idioma:"Spanish", nivel:"Beginner" },
+    { id: 5, nombre: "Programación 1", precio: 10000, estrellas: 4.8, clases:32, idioma:"Spanish", nivel:"Intermediate"},
+    { id: 6, nombre: "Informática 1", precio: 40000, estrellas: 5, clases:24, idioma:"English", nivel:"Beginner" },
+    { id: 7, nombre: "Base de Datos 1", precio: 10000, estrellas: 4.5, clases:18, idioma:"Spanish", nivel:"Beginner", categoria : 1 },
 ];
 
 // Obtener los 3 cursos más populares
@@ -49,17 +49,22 @@ const info = [
     { id: 5, nombre: "Lucy", tiempo: "1.45 Hrs", estudiantes: 22 }
 ];
 
-// Asociar los 3 cursos más populares con los profesores
 const cursosConProfesor = cursosPopulares.map((curso, index) => ({
     ...curso,
-    profesor: info[index]  // Asociamos un profesor a cada curso
+    profesor: info[index] // Asociamos el profesor al curso
 }));
+
+
+const cursosTop3 = cursosConProfesor.slice(0, 3);
+
+
 
 // Ruta de inicio
 app.get("/", (req, res) => {
     res.render("index", {
         categorias: categorias,
-        cursosTop3: cursosConProfesor,  // Pasamos los cursos con sus respectivos profesores
+        cursosTop3: cursosTop3,
+        cursosConProfesor: cursosConProfesor,
     });
 });
 
@@ -72,7 +77,9 @@ app.get("/acerca-de", (req, res) => {
 app.get("/cursos", (req, res) => {
 	res.render("courses", {
 		categorias: categorias,
-		cursosTop3:cursosTop3
+		cursosTop3:cursosTop3,
+        cursosConProfesor: cursosConProfesor,
+
 	});
 });
 
@@ -90,6 +97,61 @@ app.get("/nuestro-equipo", (req, res) => {
 app.get("/testimonial", (req, res) => {
 	res.render('testimonial');
 });
+
+// Ruta para los detalles de un curso, con un ID
+app.get('/curso/:id', (req, res) => {
+    const cursoId = parseInt(req.params.id);
+    
+    // Buscar el curso por ID
+    const curso = cursosConProfesor.find(c => c.id === cursoId);
+    if (!curso) {
+        return res.status(404).send("Curso no encontrado");
+    }
+
+    res.render('readmore', { curso,categorias }); // Renderiza la vista "readmore" con los datos del curso
+});
+
+// Ruta para los detalles de un categoris, con un ID
+app.get('/categoria/:id', (req, res) => {
+    const categoriaId = parseInt(req.params.id);
+    
+    // Buscar el curso por ID
+    const categoria = categorias.find(c => c.id === categoriaId);
+    if (categoriaId) {
+        return res.send(`Mostrando la categoría ${categoria.nombre}`);
+      }
+    if (!categoria) {
+        return res.status(404).send("Categoria no encontrada");
+    }
+
+    res.render('categories', { categoria}); 
+    
+});
+
+app.get("/categoria/:categoriaId/curso/:cursoId", (req, res) => {
+    const categoriaId = parseInt(req.params.categoriaId);  // Usamos el parámetro categoriaId
+    const cursoId = parseInt(req.params.cursoId);          // Usamos el parámetro cursoId
+    
+    // Buscar la categoría por ID
+    const categoria = categorias.find(c => c.id === categoriaId);
+    if (!categoria) {
+      return res.status(404).send('Categoría no encontrada');
+    }
+  
+    // Buscar el curso por ID
+    const curso = cursos.find(c => c.id === cursoId);
+    if (!curso) {
+      return res.status(404).send('Curso no encontrado');
+    }
+    if (categoriaId && cursoId) {
+        // Mostrar el curso y categoría
+        return res.send(`Mostrando el curso con nombre: ${curso.nombre} de la categoría con nombre: ${categoria.nombre}`);
+      } 
+    res.render('categories', { categoria, curso });
+  });
+  
+  
+
 
 
 
